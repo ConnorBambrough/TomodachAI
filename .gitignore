@@ -108,7 +108,7 @@ venv.bak/
 
 # Spyder project settings
 .spyderproject
-.spyproject
+.spyproject*
 
 # Rope project settings
 .ropeproject
@@ -130,3 +130,5 @@ cats/
 jimin/
 suga/
 think/
+smug/
+token.txt
