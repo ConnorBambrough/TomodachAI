@@ -40,7 +40,7 @@ async def on_message(message):  # event that happens per any message.
     await bot.process_commands(message)
 
 @bot.command()
-async def cats(ctx):
+async def cat(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/cats"))
     await ctx.send(file=discord.File("cats/" + rand))
 
@@ -66,8 +66,13 @@ async def jimin(ctx):
 @bot.command()
 async def suga(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/suga"))
-    rand = random.choice(os.listdir("/root/TomodachAI/suga"))
     await ctx.send(file=discord.File("suga/" + rand))
+
+@bot.command()
+async def V(ctx):
+    rand = random.choice(os.listdir("/root/TomodachAI/V"))
+    await ctx.send(file=discord.File("V/" + rand))
+
 
 @bot.command()
 async def dance(ctx):
