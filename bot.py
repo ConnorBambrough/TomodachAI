@@ -28,7 +28,7 @@ bot = commands.Bot(                         # Create a new bot
     case_insensitive=True                   # Make the commands case insensitive
 )
 
-cogs = ['cogs.basic', 'cogs.kpop', 'imgspam']
+cogs = ['cogs.basic', 'cogs.kpop', 'cogs.imgspam']
 
 @bot.event  # event decorator/wrapper. More on decorators here: https://pythonprogramming.net/decorators-intermediate-python-tutorial/
 async def on_ready():  # method expected by client. This runs once when connected

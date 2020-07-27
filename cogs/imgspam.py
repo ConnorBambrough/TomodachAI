@@ -4,7 +4,7 @@ import os
 from discord.ext import commands
 
 
-class Kpop(commands.Cog):
+class Imgspam(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -40,4 +40,4 @@ class Kpop(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Kpop(bot))
+    bot.add_cog(Imgspam(bot))

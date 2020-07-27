@@ -23,6 +23,11 @@ class Kpop(commands.Cog):
         rand = random.choice(os.listdir("/root/TomodachAI/V"))
         await ctx.send(file=discord.File("V/" + rand))
 
+    @commands.command()
+    async def jin(self, ctx):
+        rand = random.choice(os.listdir("/root/TomodachAI/jin"))
+        await ctx.send(file=discord.File("jin/" + rand))
+
 
 def setup(bot):
     bot.add_cog(Kpop(bot))
