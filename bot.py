@@ -6,8 +6,6 @@ import os
 
 import asyncio
 
-startup_extensions = ["kpop"]
-
 token = open("token.txt", "r").read()  # I've opted to just save my token to a text file.
 
 
@@ -30,11 +28,13 @@ bot = commands.Bot(                         # Create a new bot
     case_insensitive=True                   # Make the commands case insensitive
 )
 
-cogs = ['cogs.basic']
+cogs = ['cogs.basic', 'cogs.kpop']
 
 @bot.event  # event decorator/wrapper. More on decorators here: https://pythonprogramming.net/decorators-intermediate-python-tutorial/
 async def on_ready():  # method expected by client. This runs once when connected
     print(f'We have logged in as {bot.user}')  # notification of login.
+    for cog in cogs:
+        bot.load_extension(cog)
     return
 
 
@@ -104,12 +104,5 @@ def community_report(guild):
 
     return online, idle, offline
 
-if __name__ == "__main__":
-    for extension in startup_extensions:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extension, exc))
 
 bot.run(token, bot=True, reconnect = True)  # recall my token was saved!
