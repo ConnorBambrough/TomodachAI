@@ -57,6 +57,8 @@ async def on_message(message):  # event that happens per any message.
         online, idle, offline = community_report(sentdex_guild)
         await message.channel.send(f"```Online: {online}.\nIdle/busy/dnd: {idle}.\nOffline: {offline}```")
 
+    elif message.content == '!stop': await bot.logout()
+
     await bot.process_commands(message)
 
 
