@@ -6,7 +6,7 @@ import os
 
 import asyncio
 
-startup_extensions = ["kpop"]
+startup_extensions = ['cogs.kpop']
 
 token = open("token.txt", "r").read()  # I've opted to just save my token to a text file.
 description = '''An example bot to showcase the discord.ext.commands extension
@@ -109,4 +109,4 @@ if __name__ == "__main__":
             exc = '{}: {}'.format(type(e).__name__, e)
             print('Failed to load extension {}\n{}'.format(extension, exc))
 
-    bot.run(token)  # recall my token was saved!
+bot.run(token)  # recall my token was saved!
