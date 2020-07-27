@@ -9,7 +9,6 @@ import asyncio
 token = open("token.txt", "r").read()  # I've opted to just save my token to a text file.
 
 
-
 def get_prefix(client, message):
 
     prefixes = ['!', '=']    # sets the prefixes, u can keep it as an array of only 1 item if you need only one prefix
@@ -21,14 +20,15 @@ def get_prefix(client, message):
     # Do `return prefixes` if u don't want to allow mentions instead of prefix.
     return commands.when_mentioned_or(*prefixes)(client, message)
 
+
 bot = commands.Bot(                         # Create a new bot
     command_prefix=get_prefix,              # Set the prefix
-    description='A bot used for tutorial',  # Set a description for the bot
+    description='Connors shit ass bot',     # Set a description for the bot
     owner_id=374886124126208000,            # Your unique User ID
     case_insensitive=True                   # Make the commands case insensitive
 )
 
-cogs = ['cogs.basic', 'cogs.kpop']
+cogs = ['cogs.basic', 'cogs.kpop', 'imgspam']
 
 @bot.event  # event decorator/wrapper. More on decorators here: https://pythonprogramming.net/decorators-intermediate-python-tutorial/
 async def on_ready():  # method expected by client. This runs once when connected
@@ -59,35 +59,6 @@ async def on_message(message):  # event that happens per any message.
 
     await bot.process_commands(message)
 
-@bot.command()
-async def cat(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/cats"))
-    await ctx.send(file=discord.File("cats/" + rand))
-
-@bot.command()
-async def scatter(ctx):
-    await ctx.send(file=discord.File("/root/TomodachAI/SCATTER.mp4"))
-
-@bot.command()
-async def think(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/think"))
-    await ctx.send(file=discord.File("think/" + rand))
-
-@bot.command()
-async def smug(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/smug"))
-    await ctx.send(file=discord.File("smug/" + rand))
-
-
-@bot.command()
-async def dance(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/dance"))
-    try:
-        await ctx.send(file=discord.File("dance/" + rand))
-    except Exception:
-        await ctx.send('command aint workin boss')
-        return
-
 
 def community_report(guild):
     online = 0
@@ -105,4 +76,4 @@ def community_report(guild):
     return online, idle, offline
 
 
-bot.run(token, bot=True, reconnect = True)  # recall my token was saved!
+bot.run(token, bot=True, reconnect=True)  # recall my token was saved!
