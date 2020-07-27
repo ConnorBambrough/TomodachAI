@@ -75,21 +75,6 @@ async def smug(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/smug"))
     await ctx.send(file=discord.File("smug/" + rand))
 
-@bot.command()
-async def jimin(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/jimin"))
-    await ctx.send(file=discord.File("jimin/" + rand))
-
-@bot.command()
-async def suga(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/suga"))
-    await ctx.send(file=discord.File("suga/" + rand))
-
-@bot.command()
-async def V(ctx):
-    rand = random.choice(os.listdir("/root/TomodachAI/V"))
-    await ctx.send(file=discord.File("V/" + rand))
-
 
 @bot.command()
 async def dance(ctx):
