@@ -18,10 +18,27 @@ bot = commands.Bot(command_prefix='!', description=description)
 async def on_ready():  # method expected by client. This runs once when connected
     print(f'We have logged in as {bot.user}')  # notification of login.
 
+@bot.command()
+async def load(extension_name : str):
+    """Loads an extension."""
+    try:
+        bot.load_extension(extension_name)
+    except (AttributeError, ImportError) as e:
+        await bot.say("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
+        return
+    await bot.say("{} loaded.".format(extension_name))
+
+@bot.command()
+async def unload(extension_name : str):
+    """Unloads an extension."""
+    bot.unload_extension(extension_name)
+    await bot.say("{} unloaded.".format(extension_name))
+
 
 @bot.event
 async def on_message(message):  # event that happens per any message.
-
+    if message.author == bot.user:
+        return
     # each message has a bunch of attributes. Here are a few.
     # check out more by print(dir(message)) for example.
     print(f"{message.channel}: {message.author}: {message.author.name}: {message.content}")
@@ -99,5 +116,12 @@ def community_report(guild):
 
     return online, idle, offline
 
+if __name__ == "__main__":
+    for extension in startup_extensions:
+        try:
+            bot.load_extension(extension)
+        except Exception as e:
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load extension {}\n{}'.format(extension, exc))
 
-bot.run(token)  # recall my token was saved!
+    bot.run(token)  # recall my token was saved!
