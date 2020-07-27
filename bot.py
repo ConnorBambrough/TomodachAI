@@ -1,12 +1,15 @@
+import traceback
+
 import discord
 
 from discord.ext import commands
 import random
 import os
+from os import listdir
+from os.path import isfile, join
 
-import asyncio
 
-startup_extensions = ['cogs.kpop']
+cogs_dir = "cogs"
 
 token = open("token.txt", "r").read()  # I've opted to just save my token to a text file.
 description = '''An example bot to showcase the discord.ext.commands extension
@@ -14,9 +17,11 @@ module.
 There are a number of utility commands being showcased here.'''
 bot = commands.Bot(command_prefix='!', description=description)
 
+
 @bot.event  # event decorator/wrapper. More on decorators here: https://pythonprogramming.net/decorators-intermediate-python-tutorial/
 async def on_ready():  # method expected by client. This runs once when connected
     print(f'We have logged in as {bot.user}')  # notification of login.
+
 
 @bot.command()
 async def load(extension_name : str):
@@ -27,6 +32,7 @@ async def load(extension_name : str):
         await bot.say("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
         return
     await bot.say("{} loaded.".format(extension_name))
+
 
 @bot.command()
 async def unload(extension_name : str):
@@ -61,14 +67,17 @@ async def cat(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/cats"))
     await ctx.send(file=discord.File("cats/" + rand))
 
+
 @bot.command()
 async def scatter(ctx):
     await ctx.send(file=discord.File("/root/TomodachAI/SCATTER.mp4"))
+
 
 @bot.command()
 async def think(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/think"))
     await ctx.send(file=discord.File("think/" + rand))
+
 
 @bot.command()
 async def smug(ctx):
@@ -101,12 +110,13 @@ def community_report(guild):
 
     return online, idle, offline
 
-if __name__ == "__main__":
-    for extension in startup_extensions:
-        try:
-            bot.load_extension(extension)
-        except Exception as e:
-            exc = '{}: {}'.format(type(e).__name__, e)
-            print('Failed to load extension {}\n{}'.format(extension, exc))
 
-bot.run(token)  # recall my token was saved!
+if __name__ == "__main__":
+    for extension in [f.replace('.py', '') for f in listdir(cogs_dir) if isfile(join(cogs_dir, f))]:
+        try:
+            bot.load_extension(cogs_dir + "." + extension)
+        except Exception as e:
+            print(f'Failed to load extension {extension}.')
+            traceback.print_exc()
+
+    bot.run('token')
