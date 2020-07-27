@@ -1,44 +1,41 @@
-import traceback
-
 import discord
 
 from discord.ext import commands
 import random
 import os
-from os import listdir
-from os.path import isfile, join
 
+import asyncio
 
-cogs_dir = "cogs"
+startup_extensions = ["kpop"]
 
 token = open("token.txt", "r").read()  # I've opted to just save my token to a text file.
-description = '''An example bot to showcase the discord.ext.commands extension
-module.
-There are a number of utility commands being showcased here.'''
-bot = commands.Bot(command_prefix='!', description=description)
 
+
+
+def get_prefix(client, message):
+
+    prefixes = ['!', '=']    # sets the prefixes, u can keep it as an array of only 1 item if you need only one prefix
+
+    if not message.guild:
+        prefixes = ['==']   # Only allow '==' as a prefix when in DMs, this is optional
+
+    # Allow users to @mention the bot instead of using a prefix when using a command. Also optional
+    # Do `return prefixes` if u don't want to allow mentions instead of prefix.
+    return commands.when_mentioned_or(*prefixes)(client, message)
+
+bot = commands.Bot(                         # Create a new bot
+    command_prefix=get_prefix,              # Set the prefix
+    description='A bot used for tutorial',  # Set a description for the bot
+    owner_id=374886124126208000,            # Your unique User ID
+    case_insensitive=True                   # Make the commands case insensitive
+)
+
+cogs = ['cogs.basic']
 
 @bot.event  # event decorator/wrapper. More on decorators here: https://pythonprogramming.net/decorators-intermediate-python-tutorial/
 async def on_ready():  # method expected by client. This runs once when connected
     print(f'We have logged in as {bot.user}')  # notification of login.
-
-
-@bot.command()
-async def load(extension_name : str):
-    """Loads an extension."""
-    try:
-        bot.load_extension(extension_name)
-    except (AttributeError, ImportError) as e:
-        await bot.say("```py\n{}: {}\n```".format(type(e).__name__, str(e)))
-        return
-    await bot.say("{} loaded.".format(extension_name))
-
-
-@bot.command()
-async def unload(extension_name : str):
-    """Unloads an extension."""
-    bot.unload_extension(extension_name)
-    await bot.say("{} unloaded.".format(extension_name))
+    return
 
 
 @bot.event
@@ -67,17 +64,14 @@ async def cat(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/cats"))
     await ctx.send(file=discord.File("cats/" + rand))
 
-
 @bot.command()
 async def scatter(ctx):
     await ctx.send(file=discord.File("/root/TomodachAI/SCATTER.mp4"))
-
 
 @bot.command()
 async def think(ctx):
     rand = random.choice(os.listdir("/root/TomodachAI/think"))
     await ctx.send(file=discord.File("think/" + rand))
-
 
 @bot.command()
 async def smug(ctx):
@@ -110,13 +104,12 @@ def community_report(guild):
 
     return online, idle, offline
 
-
 if __name__ == "__main__":
-    for extension in [f.replace('.py', '') for f in listdir(cogs_dir) if isfile(join(cogs_dir, f))]:
+    for extension in startup_extensions:
         try:
-            bot.load_extension(cogs_dir + "." + extension)
+            bot.load_extension(extension)
         except Exception as e:
-            print(f'Failed to load extension {extension}.')
-            traceback.print_exc()
+            exc = '{}: {}'.format(type(e).__name__, e)
+            print('Failed to load extension {}\n{}'.format(extension, exc))
 
-    bot.run('token')
+bot.run(token, bot=True, reconnect = True)  # recall my token was saved!
