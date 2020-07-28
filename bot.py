@@ -9,9 +9,7 @@ token = open("token.txt", "r").read()  # I've opted to just save my token to a t
 
 reddit = praw.Reddit(client_id="ZPKPPTv0oiUbOQ",
                      client_secret="lzjMIcEG5FzGls5sZ4DuQsgNnD4",
-                     user_agent="Connors TomodachAI scrawling reddit",
-                     username = "olaokananab",
-                     password = "i1z52PXb")
+                     user_agent="Connors TomodachAI scrawling reddit")
 
 
 def get_prefix(client, message):
