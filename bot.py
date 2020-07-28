@@ -7,10 +7,11 @@ import praw
 
 token = open("token.txt", "r").read()  # I've opted to just save my token to a text file.
 
-reddit = praw.Reddit(client_id="ZPKPPTv0oiUbOQ",
-                     client_secret="lzjMIcEG5FzGls5sZ4DuQsgNnD4",
-                     user_agent="Connors TomodachAI scrawling reddit")
-
+reddit = praw.Reddit(client_id="S5-MgkuFjfky5A",
+                     client_secret="tmVbwBLwOSPh626X5mKJFypoQK4",
+                     user_agent="TomodachAI",
+                     username = "TomodachAI",
+                     password = "i1z52PXb")
 
 def get_prefix(client, message):
     prefixes = ['!', '=']  # sets the prefixes, u can keep it as an array of only 1 item if you need only one prefix
@@ -147,5 +148,51 @@ async def top10(ctx):
     for submission in reddit.subreddit("dankmemes").hot(limit=10):
         await ctx.channel.send(submission.title)
 
+
+@bot.command()
+async def bts(ctx):
+    try:
+        subreddit = reddit.subreddit("btspics")
+
+        imageUrls = []
+        for submission in subreddit.hot(limit=100):
+            if submission.url.endswith('.jpg') or submission.url.endswith('.png'):
+                imageUrls.append(submission.url)
+
+        discordReceive = imageUrls[random.randint(0, len(imageUrls) - 1)]
+        req.urlretrieve(discordReceive, 'tempDiscord.jpg')
+        fullPath = os.path.join(os.getcwd(), 'tempDiscord.jpg')
+
+        file = discord.File(fullPath)
+        await ctx.channel.send(file=file)
+
+        os.remove('tempDiscord.jpg')
+
+    except Exception as e:
+        print(e)
+        await ctx.channel.send('This sub is either banned, quarantined, or does not exist.')
+    return
+
+@bot.command()
+async def copypasta(ctx):
+        subreddit = reddit.subreddit('copypasta')
+
+        copyPastas = []
+        for submission in subreddit.hot(limit=200):
+            try:
+                copyPastas.append(submission.selftext)
+            except:
+                continue
+
+        #Loop for when the post is too long to send to the discord channel.
+        while True:
+            try:
+                discordReceive = copyPastas[random.randint(0, len(copyPastas) - 1)]
+                await ctx.channel.send(discordReceive)
+                break
+            except:
+                continue
+
+        return
 
 bot.run(token, bot=True, reconnect=True)  # recall my token was saved!
